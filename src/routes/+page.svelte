@@ -1,0 +1,168 @@
+<script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import { addIdea, deleteIdea } from '$lib/ideas';
+	import { user } from '$lib/user';
+	import type { FormEventHandler } from 'svelte/elements';
+	import { fade, slide } from 'svelte/transition';
+	import { z } from 'zod';
+
+	let errorMsg = $state('');
+	let loading = $state(false);
+	let { data } = $props();
+
+	const ideaSchema = z.object({
+		title: z.string().min(4).max(100, { message: 'Title must be shorter than 100 characters! 🥺' }),
+		description: z.string().min(0).max(1000).optional()
+	});
+
+	$effect(() => {
+		if (errorMsg) {
+			console.log('effect errormsg');
+			var j = setTimeout(() => {
+				errorMsg = '';
+			}, 2000);
+		}
+		return () => clearTimeout(j);
+	});
+
+	const add: FormEventHandler<HTMLFormElement> = async (e) => {
+		loading = true;
+		if (!$user) return;
+		e.preventDefault();
+		const formEle = e.currentTarget;
+		const formData = new FormData(e.currentTarget);
+		const result = ideaSchema.safeParse({
+			title: formData.get('title'),
+			description: formData.get('description')
+		});
+		if (!result.success) {
+			errorMsg = result.error.issues[0].message;
+			loading = false;
+		} else {
+			await addIdea($user.$id, result.data?.title, result.data?.description)
+				.catch((e) => {
+					errorMsg = e.message;
+				})
+				.finally(() => {
+					loading = false;
+				});
+			formEle.reset();
+			invalidateAll().catch((e) => {
+				errorMsg = e.message;
+			});
+		}
+	};
+
+	const remove = async (id: string) => {
+		loading = true;
+		await deleteIdea(id).then(() => (loading = false));
+		invalidateAll();
+	};
+</script>
+
+{#if errorMsg}
+	<div
+		in:slide={{ axis: 'y', duration: 400 }}
+		out:slide={{ axis: 'y', duration: 400 }}
+		class="toast toast-top toast-center z-50 max-w-dvw"
+	>
+		<div class="alert alert-error max-w-496">
+			<span>{errorMsg}</span>
+		</div>
+	</div>
+{/if}
+<main class="bg-gray-800">
+	<section class="grid min-h-36 items-center">
+		{#if $user}
+			<div class="card w-full p-8">
+				<h2 class="mx-auto my-8 text-xl font-bold text-slate-50">Submit an Idea</h2>
+				<fieldset class="">
+					<form class="flex flex-col items-center gap-6" action="" onsubmit={add}>
+						<label for="title" class="w-full">
+							<input class="input" type="text" name="title" id="" placeholder="Title" required />
+						</label>
+						<label for="description" class="min-h-64 w-full">
+							<textarea
+								class="textarea h-full w-full"
+								name="description"
+								placeholder="My awesome new idea 💡"
+								id=""
+							></textarea>
+						</label>
+						{#if loading}
+							<button disabled class="btn">
+								<span class="loading loading-dots loading-lg"></span>
+							</button>
+						{:else}
+							<button class="btn btn-primary" type="submit">Submit</button>
+						{/if}
+					</form>
+				</fieldset>
+			</div>
+		{:else}
+			<p class="mx-auto w-fit">
+				<a class="font-bold text-green-500" href="/login">Login </a> to submit an idea!
+			</p>
+		{/if}
+	</section>
+
+	<section class="grid items-center">
+		<div class="m-8 flex items-center justify-between">
+			<h2 class="text-3xl font-bold">Latest Ideas</h2>
+			{#if data.ideas.total == 0}
+				<p class="mx-auto">No ideas yet.</p>
+			{:else}
+				<p>{data.ideas.total} ideas found!</p>
+			{/if}
+		</div>
+		<ul>
+			{#each data.ideas.documents as idea}
+				<li transition:fade={{ duration: 400 }} class="flex flex-col p-4">
+					<div class="card bg-primary text-primary-content">
+						<div class="card-body">
+							<h4 class="card-title">
+								{idea.title}
+							</h4>
+							{#if idea.description}
+								<p class="text-slate-300">
+									{idea.description}
+								</p>
+							{/if}
+							{#if $user && idea.userId == $user.$id}
+								<div class="card-actions justify-end">
+									{#if loading}
+										<button disabled class="btn self-end"
+											><span class="loading loading-dots loading-lg"></span></button
+										>
+									{:else}
+										<button class="btn btn-error self-end" onclick={() => remove(idea.$id)}
+											><svg
+												viewBox="0 0 24 24"
+												fill="none"
+												class="h-6 w-6"
+												xmlns="http://www.w3.org/2000/svg"
+												><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+													id="SVGRepo_tracerCarrier"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												></g><g id="SVGRepo_iconCarrier">
+													<path
+														d="M10 12L14 16M14 12L10 16M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6"
+														stroke="#000000"
+														stroke-width="2"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+													></path>
+												</g></svg
+											>
+										</button>
+									{/if}
+								</div>
+							{/if}
+						</div>
+					</div>
+				</li>
+			{/each}
+		</ul>
+	</section>
+</main>
