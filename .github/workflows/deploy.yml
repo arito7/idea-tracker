@@ -36,6 +36,10 @@ jobs:
       - name: build
         env:
             BASE_PATH: '/${{ github.event.repository.name }}'
+            IDEAS_DATABASE_ID: ${{ secrets.IDEAS_DATABASE_ID }}
+            IDEAS_COLLECTION_ID: ${{ secrets.IDEAS_COLLECTION_ID }}
+            ENDPOINT: ${{ secrets.ENDPOINT }}
+            PROJECT_ID: ${{ secrets.PROJECT_ID }}
         # run: npm run build
         run: deno task build
 
