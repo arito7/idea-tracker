@@ -34,7 +34,7 @@
 				</ul>
 			</div>
 		{:else}
-			<a href={`${env.BASE_URL}/login`} class="btn btn-secondary">Login</a>
+			<a href={`/login`} class="btn btn-secondary">Login</a>
 		{/if}
 	</div>
 </div>
