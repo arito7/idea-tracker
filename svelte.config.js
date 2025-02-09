@@ -12,7 +12,7 @@ const config = {
 			fallback: '404.html',
 		}),
 		paths: {
-			base: Deno.env.get('BASE_PATH') ? '' : Deno.env.get('BASE_PATH')
+			base: '/idea-tracker'
 		}
 	}
 };
