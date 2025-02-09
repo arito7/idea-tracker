@@ -7,7 +7,7 @@ import { errorMsg } from "./globals";
 const isBrowser = typeof window != 'undefined';
 
 const createUser = () => {
-    const store = writable(null)
+    const store: any = writable(null)
 
     async function init() {
         if (!isBrowser) return;
