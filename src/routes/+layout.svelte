@@ -7,7 +7,7 @@
 
 <div class="navbar shadow-sm">
 	<div class="flex-1">
-		<a class="btn btn-ghost text-xl" href="/">Idea Tracker 💡</a>
+		<a class="btn btn-ghost text-xl" href={base}>Idea Tracker 💡</a>
 	</div>
 	<div class="flex gap-2">
 		{#if $user}

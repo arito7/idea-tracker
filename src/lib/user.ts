@@ -3,6 +3,7 @@ import { ID } from "appwrite";
 import { goto } from "$app/navigation";
 import { account } from "./appwrite";
 import { errorMsg } from "./globals";
+import { base } from "$app/paths";
 
 const isBrowser = typeof window != 'undefined';
 
@@ -39,7 +40,7 @@ const createUser = () => {
         }).then(() => {
             init();
         }).then(() => {
-            goto('/')
+            goto(base)
         }).catch((e) => {
             errorMsg.set(e.message)
         })
