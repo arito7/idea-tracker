@@ -65,7 +65,7 @@
 							</label>
 							<label for="description" class="min-h-64 w-full">
 								<textarea
-									class="textarea h-full w-full"
+									class="textarea h-full w-full resize-none"
 									name="description"
 									placeholder="My awesome new idea 💡"
 									id=""
@@ -99,7 +99,13 @@
 			{#if data.ideas.total == 0}
 				<p class="mx-auto">No ideas yet.</p>
 			{:else}
-				<p>{data.ideas.total} ideas found!</p>
+				<div class="stats shadow">
+					<div class="stat">
+						<div class="stat-title">Thoughts</div>
+						<div class="stat-value text-secondary justify-self-end">{data.ideas.total}</div>
+						<div class="stat-desc">total thoughts</div>
+					</div>
+				</div>
 			{/if}
 		</div>
 		<ul>
