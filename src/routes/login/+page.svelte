@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	let { data }: { data: PageData } = $props();
 	import { user } from '$lib/user';
 	import type { FormEventHandler } from 'svelte/elements';
 	import { z } from 'zod';

@@ -2,7 +2,9 @@
 	import '../app.css';
 	import { user } from '$lib/user';
 	import { base } from '$app/paths';
+	import { page } from '$app/state';
 	let { children } = $props();
+	console.log(page.route.id);
 </script>
 
 <div class="navbar shadow-sm">
@@ -33,7 +35,7 @@
 					<li><button onclick={() => user.logout()}>Logout</button></li>
 				</ul>
 			</div>
-		{:else}
+		{:else if page.route.id != '/login'}
 			<a href={`${base}/login`} class="btn btn-secondary">Login</a>
 		{/if}
 	</div>

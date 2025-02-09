@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import { addIdea, deleteIdea } from '$lib/ideas';
+	import { addIdea, deleteIdea, getIdeas } from '$lib/ideas';
 	import { user } from '$lib/user';
 	import type { FormEventHandler } from 'svelte/elements';
-	import { fade, fly, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import { z } from 'zod';
 	import ErrorToast from '../components/ErrorToast.svelte';
 	import { errorMsg } from '$lib/globals';
+	import { base } from '$app/paths';
 
 	let loading = $state(false);
 	let { data } = $props();
@@ -86,7 +87,7 @@
 			<div class="card bg-secondary">
 				<div class="card-body">
 					<p class="text-secondary-content mx-auto flex w-fit items-center gap-4 font-semibold">
-						<a class="font-bold text-emerald-300" href="/login">Login </a> to submit an idea!💡
+						<a class="font-bold text-emerald-300" href={`${base}/login`}>Login </a> to submit an idea!💡
 					</p>
 				</div>
 			</div>
@@ -96,17 +97,21 @@
 	<section class="grid items-center">
 		<div class="m-8 flex items-center justify-between">
 			<h2 class="text-3xl font-bold">Latest Ideas</h2>
-			{#if data.ideas.total == 0}
-				<p class="mx-auto">No ideas yet.</p>
-			{:else}
-				<div class="stats shadow">
-					<div class="stat">
-						<div class="stat-title">Thoughts</div>
-						<div class="stat-value text-secondary justify-self-end">{data.ideas.total}</div>
-						<div class="stat-desc">total thoughts</div>
+			{#await data.ideas}
+				<div class="skeleton h-32 w-32"></div>
+			{:then ideas}
+				{#if ideas.total == 0}
+					<p class="mx-auto">No ideas yet.</p>
+				{:else}
+					<div class="stats shadow">
+						<div class="stat">
+							<div class="stat-title">Thoughts</div>
+							<div class="stat-value text-secondary justify-self-end">{ideas.total}</div>
+							<div class="stat-desc">total thoughts</div>
+						</div>
 					</div>
-				</div>
-			{/if}
+				{/if}
+			{/await}
 		</div>
 		<ul>
 			{#each data.ideas.documents as idea}
