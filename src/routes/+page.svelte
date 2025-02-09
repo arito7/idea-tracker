@@ -3,26 +3,20 @@
 	import { addIdea, deleteIdea } from '$lib/ideas';
 	import { user } from '$lib/user';
 	import type { FormEventHandler } from 'svelte/elements';
-	import { fade, slide } from 'svelte/transition';
+	import { fade, fly, slide } from 'svelte/transition';
 	import { z } from 'zod';
+	import ErrorToast from '../components/ErrorToast.svelte';
+	import { errorMsg } from '$lib/globals';
 
-	let errorMsg = $state('');
 	let loading = $state(false);
 	let { data } = $props();
 
 	const ideaSchema = z.object({
-		title: z.string().min(4).max(100, { message: 'Title must be shorter than 100 characters! 🥺' }),
+		title: z
+			.string()
+			.min(4, { message: 'Title must be at least 4 characters long.' })
+			.max(100, { message: 'Title must be shorter than 100 characters! 🥺' }),
 		description: z.string().min(0).max(1000).optional()
-	});
-
-	$effect(() => {
-		if (errorMsg) {
-			console.log('effect errormsg');
-			var j = setTimeout(() => {
-				errorMsg = '';
-			}, 2000);
-		}
-		return () => clearTimeout(j);
 	});
 
 	const add: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -31,24 +25,21 @@
 		e.preventDefault();
 		const formEle = e.currentTarget;
 		const formData = new FormData(e.currentTarget);
-		const result = ideaSchema.safeParse({
-			title: formData.get('title'),
-			description: formData.get('description')
-		});
+		const result = ideaSchema.safeParse(Object.fromEntries(formData.entries()));
 		if (!result.success) {
-			errorMsg = result.error.issues[0].message;
+			errorMsg.set(result.error.issues[0].message);
 			loading = false;
 		} else {
 			await addIdea($user.$id, result.data?.title, result.data?.description)
 				.catch((e) => {
-					errorMsg = e.message;
+					errorMsg.set(e.message);
 				})
 				.finally(() => {
 					loading = false;
 				});
 			formEle.reset();
 			invalidateAll().catch((e) => {
-				errorMsg = e.message;
+				errorMsg.set(e.message);
 			});
 		}
 	};
@@ -60,49 +51,45 @@
 	};
 </script>
 
-{#if errorMsg}
-	<div
-		in:slide={{ axis: 'y', duration: 400 }}
-		out:slide={{ axis: 'y', duration: 400 }}
-		class="toast toast-top toast-center z-50 max-w-dvw"
-	>
-		<div class="alert alert-error max-w-496">
-			<span>{errorMsg}</span>
-		</div>
-	</div>
-{/if}
-<main class="bg-gray-800">
-	<section class="grid min-h-36 items-center">
+<ErrorToast />
+<main class="">
+	<section class="grid min-h-36 items-center p-4 md:p-8">
 		{#if $user}
 			<div class="card w-full p-8">
-				<h2 class="mx-auto my-8 text-xl font-bold text-slate-50">Submit an Idea</h2>
-				<fieldset class="">
-					<form class="flex flex-col items-center gap-6" action="" onsubmit={add}>
-						<label for="title" class="w-full">
-							<input class="input" type="text" name="title" id="" placeholder="Title" required />
-						</label>
-						<label for="description" class="min-h-64 w-full">
-							<textarea
-								class="textarea h-full w-full"
-								name="description"
-								placeholder="My awesome new idea 💡"
-								id=""
-							></textarea>
-						</label>
-						{#if loading}
-							<button disabled class="btn">
-								<span class="loading loading-dots loading-lg"></span>
-							</button>
-						{:else}
-							<button class="btn btn-primary" type="submit">Submit</button>
-						{/if}
-					</form>
-				</fieldset>
+				<div class="card-body">
+					<h2 class="mx-auto my-8 text-xl font-bold">Submit an Idea</h2>
+					<fieldset class="">
+						<form class="flex flex-col items-center gap-6" action="" onsubmit={add}>
+							<label for="title" class="w-full">
+								<input class="input" type="text" name="title" id="" placeholder="Title" required />
+							</label>
+							<label for="description" class="min-h-64 w-full">
+								<textarea
+									class="textarea h-full w-full"
+									name="description"
+									placeholder="My awesome new idea 💡"
+									id=""
+								></textarea>
+							</label>
+							{#if loading}
+								<button disabled class="btn">
+									<span class="loading loading-dots loading-lg"></span>
+								</button>
+							{:else}
+								<button class="btn btn-primary" type="submit">Submit</button>
+							{/if}
+						</form>
+					</fieldset>
+				</div>
 			</div>
 		{:else}
-			<p class="mx-auto w-fit">
-				<a class="font-bold text-green-500" href="/login">Login </a> to submit an idea!
-			</p>
+			<div class="card bg-secondary">
+				<div class="card-body">
+					<p class="text-secondary-content mx-auto flex w-fit items-center gap-4 font-semibold">
+						<a class="font-bold text-emerald-300" href="/login">Login </a> to submit an idea!💡
+					</p>
+				</div>
+			</div>
 		{/if}
 	</section>
 
@@ -117,8 +104,8 @@
 		</div>
 		<ul>
 			{#each data.ideas.documents as idea}
-				<li transition:fade={{ duration: 400 }} class="flex flex-col p-4">
-					<div class="card bg-primary text-primary-content">
+				<li class="flex flex-col p-4">
+					<div in:slide={{ axis: 'x', duration: 400 }} class="card bg-primary text-primary-content">
 						<div class="card-body">
 							<h4 class="card-title">
 								{idea.title}

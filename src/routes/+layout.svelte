@@ -4,7 +4,7 @@
 	let { children } = $props();
 </script>
 
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar shadow-sm">
 	<div class="flex-1">
 		<a class="btn btn-ghost text-xl" href="/">Idea Tracker 💡</a>
 	</div>
@@ -23,11 +23,11 @@
 					tabindex="0"
 					class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
 				>
+					<li class="text-xl font-semibold">
+						<span>{$user.name}</span>
+					</li>
 					<li>
-						<a class="justify-between">
-							Profile
-							<span class="badge">New</span>
-						</a>
+						<a class="justify-between"> Profile </a>
 					</li>
 					<li><button onclick={() => user.logout()}>Logout</button></li>
 				</ul>
