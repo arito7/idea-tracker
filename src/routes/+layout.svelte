@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { user } from '$lib/user';
+	import { env } from '$env/dynamic/public';
 	let { children } = $props();
 </script>
 
@@ -33,7 +34,7 @@
 				</ul>
 			</div>
 		{:else}
-			<a href="/login" class="btn btn-secondary">Login</a>
+			<a href={`${env.BASE_URL}/login`} class="btn btn-secondary">Login</a>
 		{/if}
 	</div>
 </div>
