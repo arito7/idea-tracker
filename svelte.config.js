@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 /** @type {import('@sveltejs/kit').Config} */
@@ -11,7 +12,7 @@ const config = {
 			fallback: '404.html',
 		}),
 		paths: {
-			base: Deno.argv.includes('dev') ? '' : Deno.env.get('BASE_PATH')
+			base: dev ? '' : Deno.env.get('BASE_PATH')
 		}
 	}
 };
