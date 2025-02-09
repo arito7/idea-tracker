@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import { user } from '$lib/user';
-	import { env } from '$env/dynamic/public';
 	let { children } = $props();
 </script>
 
