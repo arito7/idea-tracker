@@ -4,6 +4,7 @@
     "npm:@eslint/compat@^1.2.5": "1.2.6_eslint@9.20.0",
     "npm:@eslint/js@^9.18.0": "9.20.0",
     "npm:@sveltejs/adapter-node@^5.2.11": "5.2.12_@sveltejs+kit@2.17.1__@sveltejs+vite-plugin-svelte@5.0.3___svelte@5.19.9____acorn@8.14.0___vite@6.1.0____lightningcss@1.29.1__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_rollup@4.34.6_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1",
+    "npm:@sveltejs/adapter-static@^3.0.8": "3.0.8_@sveltejs+kit@2.17.1__@sveltejs+vite-plugin-svelte@5.0.3___svelte@5.19.9____acorn@8.14.0___vite@6.1.0____lightningcss@1.29.1__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1",
     "npm:@sveltejs/kit@^2.16.0": "2.17.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1",
     "npm:@sveltejs/vite-plugin-svelte@5": "5.0.3_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1",
     "npm:@tailwindcss/vite@4": "4.0.4_vite@6.1.0__lightningcss@1.29.1_lightningcss@1.29.1",
@@ -338,6 +339,12 @@
         "@rollup/plugin-node-resolve",
         "@sveltejs/kit@2.17.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1_vite@6.1.0",
         "rollup"
+      ]
+    },
+    "@sveltejs/adapter-static@3.0.8_@sveltejs+kit@2.17.1__@sveltejs+vite-plugin-svelte@5.0.3___svelte@5.19.9____acorn@8.14.0___vite@6.1.0____lightningcss@1.29.1__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1": {
+      "integrity": "sha512-YaDrquRpZwfcXbnlDsSrBQNCChVOT9MGuSg+dMAyfsAa1SmiAhrA5jUYUiIMC59G92kIbY/AaQOWcBdq+lh+zg==",
+      "dependencies": [
+        "@sveltejs/kit@2.17.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1"
       ]
     },
     "@sveltejs/kit@2.17.1_@sveltejs+vite-plugin-svelte@5.0.3__svelte@5.19.9___acorn@8.14.0__vite@6.1.0___lightningcss@1.29.1_svelte@5.19.9__acorn@8.14.0_vite@6.1.0__lightningcss@1.29.1": {
@@ -1603,6 +1610,7 @@
         "npm:@eslint/compat@^1.2.5",
         "npm:@eslint/js@^9.18.0",
         "npm:@sveltejs/adapter-node@^5.2.11",
+        "npm:@sveltejs/adapter-static@^3.0.8",
         "npm:@sveltejs/kit@^2.16.0",
         "npm:@sveltejs/vite-plugin-svelte@5",
         "npm:@tailwindcss/vite@4",
