@@ -4,7 +4,6 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	let { children } = $props();
-	console.log(page.route.id);
 </script>
 
 <div class="navbar shadow-sm">
